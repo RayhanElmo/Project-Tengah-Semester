@@ -28,14 +28,14 @@ void drawButton(float x, float y, float z, float radius, float r, float g, float
     // Menyimpan matriks saat ini
     glPushMatrix();
 
-   
+    // Memindahkan tombol ke posisi yang diinginkan
     glTranslatef(x, y, z);
 
-    
+    // Perbesar ukuran tombol dengan radius yang lebih besar
     glScalef(2.0f, 2.0f, 2.0f); // Membuat tombol lebih besar
 
     // Menggambar tombol sebagai sebuah sphere
-    glutSolidSphere(radius * 1.5f, 30, 30); 
+    glutSolidSphere(radius * 1.5f, 30, 30); // Radius sedikit lebih besar
 
     // Mengembalikan matriks sebelumnya
     glPopMatrix();
@@ -54,7 +54,7 @@ void drawKeyHole(float x, float y, float z, float radius, float height) {
 
     // Menggambar silinder (lubang kunci) dengan ukuran lebih kecil dan pendek
     GLUquadric* quad = gluNewQuadric();
-    gluCylinder(quad, radius * 2.0f, radius * 2.0f, height * 0.5f, 30, 30); 
+    gluCylinder(quad, radius * 2.0f, radius * 2.0f, height * 0.5f, 30, 30); // Radius lebih besar, tinggi lebih pendek
 
     // Mengembalikan matriks sebelumnya
     glPopMatrix();
@@ -68,12 +68,13 @@ void drawPanel() {
     // Warna panel: abu-abu muda (sesuai gambar)
     glColor3f(0.9f, 0.9f, 0.9f);
 
-  
-    glScalef(6.0f, 8.0f, 2.0f); 
+    // Skala untuk membuat panel lebih tebal
+    glScalef(6.0f, 8.0f, 2.0f); // Membuat kubus panel lebih tebal (dimensi lebih besar pada sumbu Z)
     glutSolidCube(5.0);  // Menggambar panel utama
 
     glPopMatrix();
 
+    // Menggambar tombol-tombol pada panel dengan jarak yang lebih jauh
     // Tombol Hijau (Kiri Bawah)
     drawButton(-4.5f, -4.5f, 5.0f, 0.5f, 0.0f, 1.0f, 0.0f); // Hijau
     // Tombol Hijau (Kiri Atas)
@@ -91,8 +92,17 @@ void drawPanel() {
     // Tombol Merah (Kanan Bawah)
     drawButton(4.5f, -4.5f, 5.0f, 0.5f, 1.0f, 0.0f, 0.0f); // Merah
 
-    
-    drawKeyHole(-5.5f, -6.5f, 5.0f, 0.3f, 0.5f); // Lubang kunci 
+    // Menggambar lubang kunci dengan posisi lebih jauh ke bawah agar tidak bertabrakan dengan tombol
+    drawKeyHole(-5.5f, -6.5f, 5.0f, 0.3f, 0.5f); // Lubang kunci di bagian kiri bawah
+}
+
+// Fungsi untuk menggambar teks
+void drawText(float x, float y, float z, const char* text) {
+    glRasterPos3f(x, y, z);
+    while (*text) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *text);
+        text++;
+    }
 }
 
 // Fungsi untuk menggambar setiap frame
@@ -104,9 +114,9 @@ void display() {
     glLoadIdentity();
 
     // Mengatur kamera menggunakan gluLookAt untuk efek zoom out
-    gluLookAt(0.0, 10.0, 40.0,   
-        0.0, 0.0, 0.0,     
-        0.0, 1.0, 0.0);   
+    gluLookAt(0.0, 10.0, 40.0,   // Posisi kamera lebih jauh untuk zoom out
+        0.0, 0.0, 0.0,     // Titik yang dilihat
+        0.0, 1.0, 0.0);    // Arah atas
 
     // Mengatur rotasi interaktif objek berdasarkan input mouse
     glRotatef(rotateX, 1.0f, 0.0f, 0.0f); // Rotasi pada sumbu X
@@ -115,6 +125,12 @@ void display() {
     // Menggambar panel switch listrik 3D
     drawPanel();
 
+    // Menggambar teks nama kelompok di atas panel
+    drawText(-5.0f, 8.0f, 5.5f, "Kelompok 10 :");
+    drawText(-5.0f, 7.0f, 5.5f, "Fina Salsabila Pramudita (5223600006)");
+    drawText(-5.0f, 6.0f, 5.5f, "Rayhan Elmo Athalah Saputra (5223600027)");
+
+    // Memaksa rendering adegan
     glFlush();
     glutSwapBuffers();
 }
@@ -161,7 +177,7 @@ int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(800, 600); // Ukuran jendela
-    glutCreateWindow("3D Panel Switch Listrik");
+    glutCreateWindow("3D Panel Switch Listrik dengan Nama Kelompok");
 
     // Memanggil fungsi inisialisasi
     init();
